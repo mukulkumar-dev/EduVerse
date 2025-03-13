@@ -15,28 +15,28 @@ const Login = () => {
     setInputs({ ...Inputs, [name]: value });
   };
 
-    const SubmitHandler = async (e) => {
-      e.preventDefault();
-      try {
-        const res = await axios.post(
-          "http://localhost:1000/api/v1/login",
-          Inputs,
-          {
-            withCrendentails: true,
-          }
-        );
-        console.log(res);
-        // toast.succes(res.data.message);
-        history("/profile");
-      } catch (error) {
-        toast.error(error.response.data.error);
-      } finally {
-        setInputs({
-          email: "",
-          password: "",
-        });
-      }
-    };
+  const SubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:1000/api/v1/login",
+        Inputs,
+        {
+          withCrendentails: true,
+        }
+      );
+      console.log(res);
+      // toast.succes(res.data.message);
+      history("/profile");
+    } catch (error) {
+      toast.error(error.response.data.error);
+    } finally {
+      setInputs({
+        email: "",
+        password: "",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
