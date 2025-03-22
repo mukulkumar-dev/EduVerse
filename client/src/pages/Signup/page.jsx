@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Signup = () => {
   const history = useNavigate();
+  const backendLink = useSelector((state) => state.prod.link);
   const [Inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -20,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:1000/api/v1/signup",
+        `${backendLink}/api/v1/signup`,
         Inputs,
         {
           withCrendentails: true,

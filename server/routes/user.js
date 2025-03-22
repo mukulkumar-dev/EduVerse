@@ -7,4 +7,7 @@ router.post("/signup", userController.signupUser);
 //login api
 router.post("/login", userController.loginUser);
 
+//check cookie
+router.get("/check-cookie", userController.checkCookie);
+
 module.exports = router;

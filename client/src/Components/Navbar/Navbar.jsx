@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -9,6 +10,12 @@ const Navbar = () => {
     { name: "Login", to: "/login" },
   ];
 
+  const isLoggedIn= useSelector((state) => state.auth.isLoggedIn);
+  if(!isLoggedIn){
+    links.splice(2,1);
+  }else{
+    links.splice(3,1);
+  }
   return (
     <nav className="bg-blue-600 shadow-md flex flex-col">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -34,12 +41,13 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link
+          {!isLoggedIn && (<Link
             to="/signup"
             className="bg-blue-100  font-semibold py-3 px-8 rounded-lg hover:bg-blue-200 transition duration-300"
           >
             Sign Up Now
           </Link>
+          )}
         </div>
       </div>
     </nav>

@@ -3,8 +3,8 @@ import {createSlice} from "@reduxjs/toolkit";
 const prodSlice=createSlice({
     name:"prod",
     initialState:{
-        link:"http://localhost:100",
-    }
+        link:"http://localhost:1000",
+    },
 });
 
-export default prodSlice;
+export default prodSlice.reducer;

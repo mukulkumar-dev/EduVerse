@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import MainLayout from './Layout/MainLayout'
 import Home from './pages/Home/page'
@@ -12,8 +12,25 @@ import LinkedBlogs from './Components/Profile/LinkedBlogs';
 import Favorites from './Components/Profile/Favorites';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import {authActions} from './store/authReducer';
 
 const App = () => {
+    const backendLink = useSelector((state) => state.prod.link);
+    const dispatch = useDispatch();
+    useEffect(()=>{
+      const fetch=async()=>{
+        const res=await axios.get(`${backendLink}/api/v1/check-cookie`,{
+          withCredentials :true,
+        });
+        console.log(res);
+        if(res.data.message === true){
+          dispatch(authActions.login());
+        }
+      };
+      fetch();
+  },[]);
   return (
     <>
       <ToastContainer/>
