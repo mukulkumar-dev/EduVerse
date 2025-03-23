@@ -1,6 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { authActions} from '../../store/authReducer';
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const links = [
@@ -10,12 +13,25 @@ const Navbar = () => {
     { name: "Login", to: "/login" },
   ];
 
-  const isLoggedIn= useSelector((state) => state.auth.isLoggedIn);
-  if(!isLoggedIn){
-    links.splice(2,1);
-  }else{
-    links.splice(3,1);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  if (!isLoggedIn) {
+    links.splice(2, 1);
+  } else {
+    links.splice(3, 1);
   }
+
+  const dispatch= useDispatch();
+  const backendLink= useSelector((state)=> state.prod.link);
+  const history=useNavigate();
+  const LogoutHandler = async ()=>{
+      await axios.post(`${backendLink}/api/v1/logout`,{
+      withcredentials:true,
+    });
+    dispatch(authActions.logout());
+    // toast.succes(res.data.message);
+    history("/");
+  };
+
   return (
     <nav className="bg-blue-600 shadow-md flex flex-col">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -41,12 +57,22 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          {!isLoggedIn && (<Link
-            to="/signup"
-            className="bg-blue-100  font-semibold py-3 px-8 rounded-lg hover:bg-blue-200 transition duration-300"
-          >
-            Sign Up Now
-          </Link>
+          {!isLoggedIn && (
+            <Link
+              to="/signup"
+              className="bg-blue-100  font-semibold py-3 px-8 rounded-lg hover:bg-blue-200 transition duration-300"
+            >
+              Sign Up Now
+            </Link>
+          )}
+          {isLoggedIn && (
+            <Link
+              to="/"
+              className="bg-blue-100  font-semibold py-3 px-8 rounded-lg hover:bg-blue-200 transition duration-300"
+              onClick={LogoutHandler}
+            >
+              Logout
+            </Link>
           )}
         </div>
       </div>

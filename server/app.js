@@ -19,7 +19,8 @@ app.use(cookieParser());
 app.use("/api/v1", userApi);
 
 //Server
-app.listen(process.env.PORT, ()=>{
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, ()=>{
     // conn();
-    console.log(`Server Started at ${process.env.PORT}`);
+    console.log(`Server Started at ${PORT}`);
 });

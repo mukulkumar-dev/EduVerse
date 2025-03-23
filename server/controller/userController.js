@@ -68,12 +68,13 @@ exports.loginUser= async(req, res) =>{
         expiresIn: "30d",  //Token expires in 30 days
     });
 
-    res.cookie("blogAppCookie", token,{
-        httpOnly:true,
-        maxAge:30*24*60*60*1000,
-        secure:true,
-        sameSite:"None",
-    });
+    res.cookie("blogAppCookie", token, {
+    httpOnly: true,  
+    maxAge: 30 * 24 * 60 * 60 * 1000, 
+    secure: process.env.NODE_ENV === "production", // true in production (HTTPS), false in dev
+    sameSite: "None", // Needed for cross-origin requests
+});
+
 
     return res.status(200).json({success:true, message: "Login Successfully "});
 
@@ -87,7 +88,7 @@ exports.loginUser= async(req, res) =>{
 //check-cookie
 exports.checkCookie = (req, res) =>{
     try{
-        const token = req.cookie.blogAppCookie;
+        const token = req.cookies.blogAppCookie;
         console.log("Received Cookie:", token);
         if(token){
             return res.status(200).json({message : true});
@@ -95,5 +96,20 @@ exports.checkCookie = (req, res) =>{
         return res.status(200).json({message : false});
     }catch(error){
         return res.status(500).json({error : "Internal Server Error"});
+    }
+};
+
+// Logout Controller
+exports.logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("blogAppCookie", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
+
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: "Internal Server Error" });
     }
 };
